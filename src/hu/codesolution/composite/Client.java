@@ -8,6 +8,8 @@ import hu.codesolution.composite.model.Resource;
 public class Client {
 
 	public static void main(String[] args) {
+		
+		
 		Folder root = new Folder("root");
 		
 		Folder dev = new Folder("dev");
@@ -32,13 +34,14 @@ public class Client {
         System.out.println("total size: " + root.getSize());
         printTreeStructure(root, "/", "");
         
-        CompositeController controller = new CompositeController();
+        CompositeController controller = new CompositeController(getTreeStructure(root, "/", ""));
         controller.startDesktop();
         
         
 	}
 	
-        
+		public static String str = "";
+	
         public static void printTreeStructure(Resource resource, String directoryPath, String indent) {
             if (resource instanceof Folder) { // ha mappa, akkor jarjuk be azt is, es a kiiratashoz az utvonalat frissitsuk be
                 Folder r = (Folder) resource;
@@ -50,6 +53,23 @@ public class Client {
                 // ha fajl, akkor irassuk ki az indentalast, majd a fajlt es a teljes utvonalat.
                 System.out.println(indent + resource + "\t(full path: " + directoryPath + resource + ")");
             }
+        }
+        
+        public static String getTreeStructure(Resource resource, String directoryPath, String indent) {
+            
+        	if (resource instanceof Folder) { // ha mappa, akkor jarjuk be azt is, es a kiiratashoz az utvonalat frissitsuk be
+                Folder r = (Folder) resource;
+                str += indent + r + "\n";
+                for (Resource rs : r.getResources()) {
+                    getTreeStructure(rs, directoryPath + r, "    " + indent);
+                }
+            } else {
+                // ha fajl, akkor irassuk ki az indentalast, majd a fajlt es a teljes utvonalat.
+                str += indent + resource + "\t(full path: " + directoryPath + resource + ")" + "\n";
+            }
+        	
+        	
+            return str;
         }
         
 }
